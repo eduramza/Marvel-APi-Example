@@ -1,6 +1,6 @@
 package com.ramat.original.moviescatalog.repository
 
-import android.support.v4.os.BuildCompat
+import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import com.ramat.origin.marvelheroesapp.api.MarvelApi
 import com.ramat.origin.marvelheroesapp.api.OnGetMarvelCallback
@@ -17,10 +17,10 @@ import java.security.NoSuchAlgorithmException
 
 open class MarvelRepositoryImpl: MarvelRepository {
     private var service: MarvelApi
+    private var heroesData: MutableLiveData<ReturnData> = MutableLiveData()
 
     companion object {
         const val BASE_URL = "http://gateway.marvel.com/v1/public/"
-        const val CHAR_NAME = "wolverine"
         const val PUBLIC_KEY = Constants.Keys.PUBLIC_KEY
         const val PRIVATE_KEY = Constants.Keys.PRIVATE_KEY
     }
@@ -31,41 +31,12 @@ open class MarvelRepositoryImpl: MarvelRepository {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         service = retrofit.create(MarvelApi::class.java)
+
     }
 
+    override fun getHeroes() = heroesData
 
-
-    override fun getCharacter(callback: OnGetMarvelCallback) {
-        val ts = System.currentTimeMillis().toString()
-        var hash = getMd5(ts)
-        service.getSimpleCharacter(CHAR_NAME, ts, PUBLIC_KEY, hash)
-            .enqueue(object : Callback<ReturnData> {
-
-                override fun onResponse(call: Call<ReturnData>, response: Response<ReturnData>) {
-                    if (response.isSuccessful) {
-                        val character = response.body()
-                        if (character!!.data.results != null) {
-                            callback.onSuccess(character!!.data.results)
-                        } else {
-                            callback.onError()
-                            Log.e("Response", " response null")
-                        }
-                    } else {
-                        callback.onError()
-                        Log.e("Response", response.raw().networkResponse().toString())
-                    }
-
-                }
-
-                override fun onFailure(call: Call<ReturnData>, t: Throwable) {
-                    callback.onError()
-                    t.printStackTrace()
-                    Log.e("Response", javaClass.simpleName + " not response 2" + t)
-                }
-            })
-    }
-
-    fun getMd5(ts: String): String {
+    private fun getMd5(ts: String): String {
         try {
 
             val md = MessageDigest.getInstance("MD5")
@@ -86,4 +57,34 @@ open class MarvelRepositoryImpl: MarvelRepository {
         }
     }
 
+    override fun getCharacter(callback: OnGetMarvelCallback) {
+        val ts = System.currentTimeMillis().toString()
+        var hash = getMd5(ts)
+        service.getCharacters(ts, Constants.Keys.PUBLIC_KEY, hash)
+            .enqueue(object : Callback<ReturnData>{
+                override fun onResponse(call: Call<ReturnData>, response: Response<ReturnData>) {
+
+                    if (response.isSuccessful){
+                        if (response.body() != null){
+                            heroesData.postValue(response.body())
+                            callback.onSuccess(response.body()!!)
+                        } else {
+                            callback.onError()
+                            Log.e("Response", " response null")
+                        }
+
+                    } else {
+                        callback.onError()
+                        Log.e("Response", response.raw().networkResponse().toString())
+                    }
+
+                }
+
+                override fun onFailure(call: Call<ReturnData>, t: Throwable) {
+                    callback.onError()
+                    t.printStackTrace()
+                    Log.e("Response", javaClass.simpleName + " not response 2 " + t)
+                }
+            })
+    }
 }

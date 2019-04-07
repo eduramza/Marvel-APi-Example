@@ -8,7 +8,7 @@
         android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_movies"
+            android:id="@+id/recycler_view_characters"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -23,9 +23,9 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/recycler_view_movies"
-            app:layout_constraintEnd_toEndOf="@+id/recycler_view_movies"
+            app:layout_constraintBottom_toBottomOf="@+id/recycler_view_characters"
+            app:layout_constraintEnd_toEndOf="@+id/recycler_view_characters"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/recycler_view_movies"/>
+            app:layout_constraintTop_toTopOf="@+id/recycler_view_characters"/>
 
 </android.support.constraint.ConstraintLayout>
