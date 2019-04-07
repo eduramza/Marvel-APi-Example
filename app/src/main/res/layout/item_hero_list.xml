@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <ImageView
+                android:id="@+id/image_movie"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/image_height"
+                android:background="@color/colorAccent"/>
+
+        <TextView
+                android:id="@+id/text_title"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/description_list_item_height"
+                android:text="Title Movie"
+                android:textSize="@dimen/title_text_size_list"
+                android:textStyle="bold"
+                android:textColor="@android:color/black" />
+        <TextView
+                android:id="@+id/text_genders"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/description_list_item_height"
+                android:text="Comedy"
+                android:textSize="@dimen/text_size_gender_item" />
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

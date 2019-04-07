@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Marvel Heroes App</string>
+    <string name="public_key"></string>
+    <string name="private_key"></string>
+</resources>
